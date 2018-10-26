@@ -5,19 +5,15 @@ export class BentComponent extends HTMLElement {
   }
   connectedCallback() {
     // get data
-    this._state = this.data();
-
+    this._state = watch(this.data(), () => {
+      this.render();
+    });
     // create shadow root
     const shadow = this.attachShadow({ mode: "open" });
     this._node = document.createElement("div");
     shadow.appendChild(this._node);
 
     //make local state reactive
-    watch(this._state, () => {
-      console.log("change!");
-      this.render();
-    });
-
     //run initialize methods
     this.onInit();
 

@@ -13,6 +13,7 @@ export class ExampleComponent extends BentComponent {
 
   onInit() {
     setInterval(() => {
+      console.log("timer ticks", this.getState());
       this.getState().timer += 1;
     }, 1000);
   }
