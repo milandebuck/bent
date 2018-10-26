@@ -1,10 +1,8 @@
-import { watch, TemplateEngine } from "./services";
+import { watch } from "./services";
 export class BentComponent extends HTMLElement {
-      this._state = {};
+  constructor() {
+    this._state = {};
     this.template = "";
-    constructor(dom_node) {
-    super();
-
     watch(this._state, () => {
       let prop_names = Object.keys(this._state);
       prop_names.forEach(prop_name =>
@@ -14,7 +12,7 @@ export class BentComponent extends HTMLElement {
   }
 
   render() {
-    templateEngine(this.template, this._state);
+    this.innerHTML = templateEngine(this.template, this._state);
   }
 
   bindData(data = {}) {

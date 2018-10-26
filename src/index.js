@@ -1,14 +1,8 @@
 import { Bent, getState } from "./bent/core";
-import {
-  ExampleController,
-  HomeController,
-  RandomController
-} from "./controllers/";
+import { ExampleComponent } from "./components/";
 
 Bent("#app", {
-  ExampleController,
-  HomeController,
-  RandomController
+  ExampleComponent
 });
 const state = getState();
 setInterval(() => {

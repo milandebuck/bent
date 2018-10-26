@@ -86,6 +86,18 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./src/bent/Component.js":
+/*!*******************************!*\
+  !*** ./src/bent/Component.js ***!
+  \*******************************/
+/*! exports provided: BentComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"BentComponent\", function() { return BentComponent; });\n/* harmony import */ var _services__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./services */ \"./src/bent/services/index.js\");\n\r\nclass BentComponent extends HTMLElement {\r\n  constructor() {\r\n    this._state = {};\r\n    this.template = \"\";\r\n    Object(_services__WEBPACK_IMPORTED_MODULE_0__[\"watch\"])(this._state, () => {\r\n      let prop_names = Object.keys(this._state);\r\n      prop_names.forEach(prop_name =>\r\n        Object(_services__WEBPACK_IMPORTED_MODULE_0__[\"watch\"])(this._state[prop_name], () => this.render())\r\n      );\r\n    });\r\n  }\r\n\r\n  render() {\r\n    this.innerHTML = templateEngine(this.template, this._state);\r\n  }\r\n\r\n  bindData(data = {}) {\r\n    Object.assign(this._state, data);\r\n  }\r\n\r\n  getState() {\r\n    return this._state;\r\n  }\r\n}\r\n\n\n//# sourceURL=webpack:///./src/bent/Component.js?");
+
+/***/ }),
+
 /***/ "./src/bent/core.js":
 /*!**************************!*\
   !*** ./src/bent/core.js ***!
@@ -94,7 +106,19 @@
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"render\", function() { return render; });\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"getState\", function() { return getState; });\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"Bent\", function() { return Bent; });\n/* harmony import */ var _services__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./services */ \"./src/bent/services/index.js\");\n\r\n\r\n//contains root nodes with bent-controller attributes\r\nconst nodeContainer = [];\r\n\r\n//state container\r\nconst stateContainer = {};\r\n\r\n//initial configuration of the different bant-controllers\r\nconst components = {};\r\n/**\r\n * stores and processes the DOM nodes in the nodeContainer\r\n * @param root root DOM element\r\n */\r\nfunction storeNodes(root) {\r\n  //get nodes\r\n  let nodes = root.querySelectorAll(\"[bent-controller]\");\r\n  for (let i = 0; i < nodes.length; i++) {\r\n    appendNode(nodes[i]);\r\n  }\r\n}\r\n/**\r\n * get the corresponding Data of the DOM node and store it in node & state container\r\n * @param element the dom element\r\n */\r\nfunction appendNode(element) {\r\n  //get Controller name\r\n  let name = element.getAttribute(\"bent-controller\");\r\n  //get two way binding nodes\r\n  let bindNodes = element.querySelectorAll(\"input[b-bind]\");\r\n  for (let i = 0; i < bindNodes.length; i++) {\r\n    //add twowaybinding where needed\r\n    Object(_services__WEBPACK_IMPORTED_MODULE_0__[\"twoway_binding\"])(bindNodes[i], name);\r\n  }\r\n  //deep clone to preserve template syntax\r\n  let clone = element.cloneNode(true);\r\n  try {\r\n    //get data from corresponding component\r\n    let data = new components[name]();\r\n    let node = {\r\n      element,\r\n      name,\r\n      clone\r\n    };\r\n    //add Data to state container + enable watching on var change\r\n    stateContainer[name] = Object(_services__WEBPACK_IMPORTED_MODULE_0__[\"watch\"])(data, () => {\r\n      render();\r\n    });\r\n    nodeContainer.push(node);\r\n  } catch (e) {\r\n    console.error(`${name} not found`, e);\r\n  }\r\n}\r\n/**\r\n * Renders the manipluated Dom\r\n */\r\nfunction render() {\r\n  for (let i = 0; i < nodeContainer.length; i++) {\r\n    BrowseNodes(\r\n      nodeContainer[i].element,\r\n      nodeContainer[i].clone,\r\n      getState()[nodeContainer[i].name]\r\n    );\r\n  }\r\n}\r\n\r\n/**\r\n * Browse all nodes and Templates the leaf nodes (recursive)\r\n * @param parentNode the root node on which to start\r\n * @param\r\n */\r\nfunction BrowseNodes(parentNode, original, data) {\r\n  if (parentNode.children.length > 0) {\r\n    //brows children\r\n    for (let i = 0; i < parentNode.children.length; i++) {\r\n      BrowseNodes(parentNode.children[i], original.children[i], data);\r\n    }\r\n  } else {\r\n    //template leaf node\r\n    parentNode.innerHTML = Object(_services__WEBPACK_IMPORTED_MODULE_0__[\"TemplateEngine\"])(original.innerHTML, data);\r\n  }\r\n}\r\n\r\n/**\r\n * exports the stat container\r\n */\r\nconst getState = () => stateContainer;\r\n\r\n/**\r\n * Bootstrap\r\n * @param root the root node\r\n * @param cmpnts the component data to load defaults to nothing\r\n */\r\nconst Bent = (root, cmpnts = {}) => {\r\n  //Object.assign(components, cmpnts);\r\n  Object.keys(cmpnts).forEach(key => {\r\n    components[key] = registerComponent(cmpnts[key]);\r\n  });\r\n  storeNodes(document.querySelector(root) || document);\r\n  render();\r\n};\r\n\n\n//# sourceURL=webpack:///./src/bent/core.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"render\", function() { return render; });\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"getState\", function() { return getState; });\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"Bent\", function() { return Bent; });\n/* harmony import */ var _services__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./services */ \"./src/bent/services/index.js\");\n\r\n\r\n//contains root nodes with bent-controller attributes\r\nconst nodeContainer = [];\r\n\r\n//state container\r\nconst stateContainer = {};\r\n\r\n//initial configuration of the different bant-controllers\r\nconst components = {};\r\n/**\r\n * stores and processes the DOM nodes in the nodeContainer\r\n * @param root root DOM element\r\n */\r\nfunction storeNodes(root) {\r\n  //get nodes\r\n  let nodes = root.querySelectorAll(\"[bent-controller]\");\r\n  for (let i = 0; i < nodes.length; i++) {\r\n    appendNode(nodes[i]);\r\n  }\r\n}\r\n/**\r\n * get the corresponding Data of the DOM node and store it in node & state container\r\n * @param element the dom element\r\n */\r\nfunction appendNode(element) {\r\n  //get Controller name\r\n  let name = element.getAttribute(\"bent-controller\");\r\n  //get two way binding nodes\r\n  let bindNodes = element.querySelectorAll(\"input[b-bind]\");\r\n  for (let i = 0; i < bindNodes.length; i++) {\r\n    //add twowaybinding where needed\r\n    Object(_services__WEBPACK_IMPORTED_MODULE_0__[\"twoway_binding\"])(bindNodes[i], name);\r\n  }\r\n  //deep clone to preserve template syntax\r\n  let clone = element.cloneNode(true);\r\n  try {\r\n    //get data from corresponding component\r\n    let data = new components[name]();\r\n    let node = {\r\n      element,\r\n      name,\r\n      clone\r\n    };\r\n    //add Data to state container + enable watching on var change\r\n    stateContainer[name] = Object(_services__WEBPACK_IMPORTED_MODULE_0__[\"watch\"])(data, () => {\r\n      render();\r\n    });\r\n    nodeContainer.push(node);\r\n  } catch (e) {\r\n    console.error(`${name} not found`, e);\r\n  }\r\n}\r\n/**\r\n * Renders the manipluated Dom\r\n */\r\nfunction render() {\r\n  for (let i = 0; i < nodeContainer.length; i++) {\r\n    BrowseNodes(\r\n      nodeContainer[i].element,\r\n      nodeContainer[i].clone,\r\n      getState()[nodeContainer[i].name]\r\n    );\r\n  }\r\n}\r\n\r\n/**\r\n * Browse all nodes and Templates the leaf nodes (recursive)\r\n * @param parentNode the root node on which to start\r\n * @param\r\n */\r\nfunction BrowseNodes(parentNode, original, data) {\r\n  if (parentNode.children.length > 0) {\r\n    //brows children\r\n    for (let i = 0; i < parentNode.children.length; i++) {\r\n      BrowseNodes(parentNode.children[i], original.children[i], data);\r\n    }\r\n  } else {\r\n    //template leaf node\r\n    parentNode.innerHTML = Object(_services__WEBPACK_IMPORTED_MODULE_0__[\"TemplateEngine\"])(original.innerHTML, data);\r\n  }\r\n}\r\n\r\n/**\r\n * exports the stat container\r\n */\r\nconst getState = () => stateContainer;\r\n\r\n/**\r\n * Bootstrap\r\n * @param root the root node\r\n * @param cmpnts the component data to load defaults to nothing\r\n */\r\nconst Bent = (root, cmpnts = {}) => {\r\n  //Object.assign(components, cmpnts);\r\n  Object.keys(cmpnts).forEach(key => {\r\n    console.log(cmpnts);\r\n    components[key] = Object(_services__WEBPACK_IMPORTED_MODULE_0__[\"registerComponent\"])(new cmpnts[key]());\r\n  });\r\n  //storeNodes(document.querySelector(root) || document);\r\n  //render();\r\n};\r\n\n\n//# sourceURL=webpack:///./src/bent/core.js?");
+
+/***/ }),
+
+/***/ "./src/bent/services/RegisterComponent.js":
+/*!************************************************!*\
+  !*** ./src/bent/services/RegisterComponent.js ***!
+  \************************************************/
+/*! exports provided: RegisterComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"RegisterComponent\", function() { return RegisterComponent; });\nconst RegisterComponent = obj => {\r\n  customElements.define(obj.name, obj);\r\n};\r\n\n\n//# sourceURL=webpack:///./src/bent/services/RegisterComponent.js?");
 
 /***/ }),
 
@@ -102,11 +126,11 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) *
 /*!************************************!*\
   !*** ./src/bent/services/index.js ***!
   \************************************/
-/*! exports provided: TemplateEngine, watch, twoway_binding */
+/*! exports provided: RegisterComponent, TemplateEngine, twoway_binding, watch */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _templates__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./templates */ \"./src/bent/services/templates.js\");\n/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, \"TemplateEngine\", function() { return _templates__WEBPACK_IMPORTED_MODULE_0__[\"TemplateEngine\"]; });\n\n/* harmony import */ var _watch__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./watch */ \"./src/bent/services/watch.js\");\n/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, \"watch\", function() { return _watch__WEBPACK_IMPORTED_MODULE_1__[\"watch\"]; });\n\n/* harmony import */ var _two_waybinding__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./two-waybinding */ \"./src/bent/services/two-waybinding.js\");\n/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, \"twoway_binding\", function() { return _two_waybinding__WEBPACK_IMPORTED_MODULE_2__[\"twoway_binding\"]; });\n\n!(function webpackMissingModule() { var e = new Error(\"Cannot find module 'ControllerBinder'\"); e.code = 'MODULE_NOT_FOUND'; throw e; }());\nthrow new Error(\"Cannot find module 'ControllerBinder'\");\n\r\n\r\n\r\n\r\n\n\n//# sourceURL=webpack:///./src/bent/services/index.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _RegisterComponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./RegisterComponent */ \"./src/bent/services/RegisterComponent.js\");\n/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, \"RegisterComponent\", function() { return _RegisterComponent__WEBPACK_IMPORTED_MODULE_0__[\"RegisterComponent\"]; });\n\n/* harmony import */ var _templates__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./templates */ \"./src/bent/services/templates.js\");\n/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, \"TemplateEngine\", function() { return _templates__WEBPACK_IMPORTED_MODULE_1__[\"TemplateEngine\"]; });\n\n/* harmony import */ var _two_waybinding__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./two-waybinding */ \"./src/bent/services/two-waybinding.js\");\n/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, \"twoway_binding\", function() { return _two_waybinding__WEBPACK_IMPORTED_MODULE_2__[\"twoway_binding\"]; });\n\n/* harmony import */ var _watch__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./watch */ \"./src/bent/services/watch.js\");\n/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, \"watch\", function() { return _watch__WEBPACK_IMPORTED_MODULE_3__[\"watch\"]; });\n\n\r\n\r\n\r\n\r\n\n\n//# sourceURL=webpack:///./src/bent/services/index.js?");
 
 /***/ }),
 
@@ -146,27 +170,27 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) *
 
 /***/ }),
 
-/***/ "./src/controllers/controllers.js":
-/*!****************************************!*\
-  !*** ./src/controllers/controllers.js ***!
-  \****************************************/
-/*! exports provided: ExampleController, HomeController, RandomController */
+/***/ "./src/components/ExampleComponent.js":
+/*!********************************************!*\
+  !*** ./src/components/ExampleComponent.js ***!
+  \********************************************/
+/*! exports provided: ExampleComponent */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"ExampleController\", function() { return ExampleController; });\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"HomeController\", function() { return HomeController; });\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"RandomController\", function() { return RandomController; });\nfunction ExampleController() {\r\n  (this.timer = 0), (this.someVal = 2), (this.exampleVal = \"succes\");\r\n}\r\n\r\nfunction HomeController() {\r\n  (this.someVal = 6), (this.exampleVal = \"Home\");\r\n}\r\n\r\nfunction RandomController() {\r\n  (this.someVal = 10), (this.exampleVal = \"Random\");\r\n}\r\n\r\n\r\n\n\n//# sourceURL=webpack:///./src/controllers/controllers.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"ExampleComponent\", function() { return ExampleComponent; });\n/* harmony import */ var _bent_Component__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./../bent/Component */ \"./src/bent/Component.js\");\n\r\nclass ExampleComponent extends _bent_Component__WEBPACK_IMPORTED_MODULE_0__[\"BentComponent\"] {\r\n  constructor() {\r\n    super();\r\n    this.name = \"example-component\";\r\n    this.template = `<div><h1>Timer: <span>{{timer}}</span></h1><input type=\"number\" b-bind=\"timer\"><p>testtekst {{someVal}} bla</p></div><p>{{timer}}</p>`;\r\n\r\n    bindData({\r\n      timer: 0,\r\n      someValue: 1,\r\n      someExample: 2\r\n    });\r\n  }\r\n}\r\n\n\n//# sourceURL=webpack:///./src/components/ExampleComponent.js?");
 
 /***/ }),
 
-/***/ "./src/controllers/index.js":
-/*!**********************************!*\
-  !*** ./src/controllers/index.js ***!
-  \**********************************/
-/*! exports provided: ExampleController, HomeController, RandomController */
+/***/ "./src/components/index.js":
+/*!*********************************!*\
+  !*** ./src/components/index.js ***!
+  \*********************************/
+/*! no exports provided */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _controllers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./controllers */ \"./src/controllers/controllers.js\");\n/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, \"ExampleController\", function() { return _controllers__WEBPACK_IMPORTED_MODULE_0__[\"ExampleController\"]; });\n\n/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, \"HomeController\", function() { return _controllers__WEBPACK_IMPORTED_MODULE_0__[\"HomeController\"]; });\n\n/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, \"RandomController\", function() { return _controllers__WEBPACK_IMPORTED_MODULE_0__[\"RandomController\"]; });\n\n\r\n\n\n//# sourceURL=webpack:///./src/controllers/index.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _ExampleComponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ExampleComponent */ \"./src/components/ExampleComponent.js\");\n/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, \"ExampleComponent\", function() { return _ExampleComponent__WEBPACK_IMPORTED_MODULE_0__[\"ExampleComponent\"]; });\n\n\r\n\n\n//# sourceURL=webpack:///./src/components/index.js?");
 
 /***/ }),
 
@@ -178,7 +202,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _con
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _bent_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./bent/core */ \"./src/bent/core.js\");\n/* harmony import */ var _controllers___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./controllers/ */ \"./src/controllers/index.js\");\n\r\n\r\n\r\nObject(_bent_core__WEBPACK_IMPORTED_MODULE_0__[\"Bent\"])(\"#app\", {\r\n  ExampleController: _controllers___WEBPACK_IMPORTED_MODULE_1__[\"ExampleController\"],\r\n  HomeController: _controllers___WEBPACK_IMPORTED_MODULE_1__[\"HomeController\"],\r\n  RandomController: _controllers___WEBPACK_IMPORTED_MODULE_1__[\"RandomController\"]\r\n});\r\nconst state = Object(_bent_core__WEBPACK_IMPORTED_MODULE_0__[\"getState\"])();\r\nsetInterval(() => {\r\n  state.ExampleController.timer += 1;\r\n}, 1000);\r\n\n\n//# sourceURL=webpack:///./src/index.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _bent_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./bent/core */ \"./src/bent/core.js\");\n/* harmony import */ var _components___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/ */ \"./src/components/index.js\");\n\r\n\r\n\r\nObject(_bent_core__WEBPACK_IMPORTED_MODULE_0__[\"Bent\"])(\"#app\", {\r\n  ExampleComponent: _components___WEBPACK_IMPORTED_MODULE_1__[\"ExampleComponent\"]\r\n});\r\nconst state = Object(_bent_core__WEBPACK_IMPORTED_MODULE_0__[\"getState\"])();\r\nsetInterval(() => {\r\n  state.ExampleController.timer += 1;\r\n}, 1000);\r\n\n\n//# sourceURL=webpack:///./src/index.js?");
 
 /***/ })
 

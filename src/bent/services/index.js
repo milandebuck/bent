@@ -1,4 +1,4 @@
+export * from "./RegisterComponent";
 export * from "./templates";
-export * from "./watch";
 export * from "./two-waybinding";
-export * from "ControllerBinder";
+export * from "./watch";

@@ -1,4 +1,9 @@
-import { watch, TemplateEngine, twoway_binding } from "./services";
+import {
+  registerComponent,
+  TemplateEngine,
+  twoway_binding,
+  watch
+} from "./services";
 
 //contains root nodes with bent-controller attributes
 const nodeContainer = [];
@@ -94,8 +99,9 @@ export const getState = () => stateContainer;
 export const Bent = (root, cmpnts = {}) => {
   //Object.assign(components, cmpnts);
   Object.keys(cmpnts).forEach(key => {
-    components[key] = registerComponent(cmpnts[key]);
+    console.log(cmpnts);
+    components[key] = registerComponent(new cmpnts[key]());
   });
-  storeNodes(document.querySelector(root) || document);
-  render();
+  //storeNodes(document.querySelector(root) || document);
+  //render();
 };

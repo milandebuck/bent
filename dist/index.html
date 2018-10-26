@@ -10,30 +10,9 @@
 
 <body>
     <div id="app">
-        <div></div>
-        <div></div>
-        <div bent-controller="ExampleController">
-            <div>
-                <h1>Timer: <span>{{timer}}</span></h1>
-                <input type="number" b-bind="timer">
-                <p>testtekst {{someVal}} bla</p>
-            </div>
-            <p>{{timer}}</p>
-        </div>
-
-        <div bent-controller="HomeController">
-            <div>
-                <p>{{someVal}}</p>
-            </div>
-            <p>{{exampleVal}}</p>
-        </div>
-        <div bent-controller="RandomController">
-            <div>
-                <p>{{someVal}}</p>
-            </div>
-            <p>{{exampleVal}}</p>
-        </div>
+        <example-component></example-component>
     </div>
+
 
 </body>
 <script src="bundle.js"></script>
