@@ -1,4 +1,3 @@
-import { getState } from "./../core";
 /**
  * add events regarding two way data binding back to the state container
  * @param element the html element on which to bind the events

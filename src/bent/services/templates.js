@@ -3,7 +3,7 @@
  * @param tpl string to template
  * @param data data array containing the binded value
  */
-export const TemplateEngine = function(tpl, data) {
+export const templateEngine = function(tpl, data) {
   let regex = /\{\{([^}]+)\}\}/g;
   let match;
   while ((match = regex.exec(tpl))) {

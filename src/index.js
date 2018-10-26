@@ -1,10 +1,5 @@
-import { Bent, getState } from "./bent/core";
+import Bent, { getState } from "./bent/core";
 import { ExampleComponent } from "./components/";
 
-Bent("#app", {
-  ExampleComponent
-});
-const state = getState();
-setInterval(() => {
-  state.ExampleController.timer += 1;
-}, 1000);
+const bent = Bent("#app");
+bent.RegisterComponent("example-component", ExampleComponent);

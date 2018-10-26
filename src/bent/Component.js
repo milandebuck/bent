@@ -1,25 +1,39 @@
-import { watch } from "./services";
+import { watch, templateEngine } from "./services";
 export class BentComponent extends HTMLElement {
   constructor() {
-    this._state = {};
-    this.template = "";
+    super();
+  }
+  connectedCallback() {
+    // get data
+    this._state = this.data();
+
+    // create shadow root
+    const shadow = this.attachShadow({ mode: "open" });
+    this._node = document.createElement("div");
+    shadow.appendChild(this._node);
+
+    //make local state reactive
     watch(this._state, () => {
-      let prop_names = Object.keys(this._state);
-      prop_names.forEach(prop_name =>
-        watch(this._state[prop_name], () => this.render())
-      );
+      console.log("change!");
+      this.render();
     });
-  }
 
+    //run initialize methods
+    this.onInit();
+
+    //render the HTML
+    this.render();
+  }
   render() {
-    this.innerHTML = templateEngine(this.template, this._state);
+    this._node.innerHTML = templateEngine(this.template, this._state);
   }
-
-  bindData(data = {}) {
-    Object.assign(this._state, data);
-  }
-
   getState() {
     return this._state;
   }
+
+  data() {
+    return {};
+  }
+
+  onInit() {}
 }

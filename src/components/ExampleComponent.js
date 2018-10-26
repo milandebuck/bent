@@ -2,13 +2,18 @@ import { BentComponent } from "./../bent/Component";
 export class ExampleComponent extends BentComponent {
   constructor() {
     super();
-    this.name = "example-component";
     this.template = `<div><h1>Timer: <span>{{timer}}</span></h1><input type="number" b-bind="timer"><p>testtekst {{someVal}} bla</p></div><p>{{timer}}</p>`;
-
-    bindData({
+  }
+  data() {
+    return {
       timer: 0,
-      someValue: 1,
-      someExample: 2
-    });
+      someVal: 1
+    };
+  }
+
+  onInit() {
+    setInterval(() => {
+      this.getState().timer += 1;
+    }, 1000);
   }
 }

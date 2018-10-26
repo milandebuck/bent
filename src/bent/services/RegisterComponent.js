@@ -1,3 +1,3 @@
-export const RegisterComponent = obj => {
-  customElements.define(obj.name, obj);
+export const RegisterComponent = (name, obj) => {
+  customElements.define(name, obj);
 };
